@@ -1,21 +1,23 @@
 package entities;
 
-public abstract class RelatorioPagamentos {
-	protected Double caixinhaTotal;
-	protected Double caixinhaConta;
-	protected Double caixinhaEspecie;
-	protected Double conducao;
+public class RelatorioPagamentos {
+	private Double pagamento;
+	private Double caixinhaTotal;
+	private Double caixinhaConta;
+	private Double caixinhaEspecie;
+	private Double conducao;
 
 	public RelatorioPagamentos() {
 		
 	}
 
 	
-	public RelatorioPagamentos(Double caixinhaTotal, Double caixinhaConta, Double caixinhaEspecie, Double conducao) {
+	public RelatorioPagamentos(Double caixinhaTotal, Double caixinhaConta, Double caixinhaEspecie, Double conducao, Double pagamento) {
 		this.caixinhaTotal = caixinhaTotal;
 		this.caixinhaConta = caixinhaConta;
 		this.caixinhaEspecie = caixinhaEspecie;
 		this.conducao = conducao;
+		this.pagamento = pagamento;
 	}
 
 	public Double getConducao() {
@@ -51,12 +53,21 @@ public abstract class RelatorioPagamentos {
 	}
 
 	public double total() {
-		return conducao + caixinhaConta + caixinhaEspecie; 
+		return conducao + caixinhaConta + caixinhaEspecie + pagamento; 
 	}
 	public String dadosCaixinha() {
 		return "Valor total da caixinha: " + caixinhaTotal + 
 				"\nTotal de caixinha recebida: " + (caixinhaConta + caixinhaEspecie) + 
 				"\nCaixinha pendente: " + (caixinhaTotal - caixinhaConta - caixinhaEspecie);
+	}
+	@Override
+	public String toString() {
+		return "***********************************"
+		+ "\nVale/Pagamento: R$" + pagamento
+		+ "\nCondução: R$" + conducao + "\n\n"
+		+ dadosCaixinha() + "\n"
+		+"\nTotal recebido : R$" + total() ;
+	 	
 	}
 	
 }
