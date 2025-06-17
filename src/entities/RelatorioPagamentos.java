@@ -55,10 +55,12 @@ public class RelatorioPagamentos {
 	public double total() {
 		return conducao + caixinhaConta + caixinhaEspecie + pagamento; 
 	}
+	
+	
 	public String dadosCaixinha() {
-		return "Valor total da caixinha: " + caixinhaTotal + 
-				"\nTotal de caixinha recebida: " + (caixinhaConta + caixinhaEspecie) + 
-				"\nCaixinha pendente: " + (caixinhaTotal - caixinhaConta - caixinhaEspecie);
+		return "Total da caixinha: R$" + String.format("%.2f",caixinhaTotal)+ 
+				"\nCaixinha recebida: R$" + String.format("%.2f",(caixinhaConta + caixinhaEspecie)) + 
+				"\nCaixinha pendente: R$" + String.format("%.2f",(caixinhaTotal - caixinhaConta - caixinhaEspecie));
 	}
 	@Override
 	public String toString() {

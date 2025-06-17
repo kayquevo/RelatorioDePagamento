@@ -18,12 +18,25 @@ public class Program
 		Scanner sc = new Scanner(System.in);
 		List<RelatorioPagamentos> list = new ArrayList<>();
 		
-		System.out.print("Insirá o local do arquivo : ");
-		String localDoArquivo = sc.nextLine();
+		String localDoPasta = "C:\\temp\\dadosDePagamento"; 
 		
-		File file = new File(localDoArquivo);
+		File pasta = new File(localDoPasta);
+		File[] files = pasta.listFiles(File::isFile);
 		
-		try(BufferedReader br = new BufferedReader(new FileReader(file))){
+		System.out.println("ESCOLHA UM ARQUIVO: ");
+		
+		for(int i = 0; i < files.length; i++) {
+			System.out.println("[" + (i + 1) + "] " + files[i].getName());
+		}
+		System.out.println();
+		System.out.print("Digite o número correspondente: ");
+		int escolha = sc.nextInt();
+		
+		File caminho = files[escolha - 1];
+		
+		System.out.println();
+		
+		try(BufferedReader br = new BufferedReader(new FileReader(caminho))){
 			String line = br.readLine();
 			
 			while(line != null) {
