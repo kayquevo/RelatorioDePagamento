@@ -1,6 +1,6 @@
 # 💰 Gerador de Relatório de Pagamento
 
-> Projeto pessoal baseado na **Seção 15: Trabalhando com Arquivos**, do professor [Nélio Alves](https://github.com/nelioalves).  
+> Projeto pessoal baseado na **Seção 15: Trabalhando com Arquivos**, do professor [Nélio Alves]([https://github.com/acenelio]).  
 > O objetivo foi consolidar os conhecimentos adquiridos com um sistema funcional de leitura e geração de relatórios.
 
 ---
