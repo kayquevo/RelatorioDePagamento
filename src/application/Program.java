@@ -1,8 +1,10 @@
 package application;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -10,14 +12,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
-import entities.RelatorioPagamentos;
+import entities.Pagamento;
 
 public class Program
 {
 	public static void main(String[] args){
 		Locale.setDefault(Locale.US);
 		Scanner sc = new Scanner(System.in);
-		List<RelatorioPagamentos> list = new ArrayList<>();
+		List<Pagamento> list = new ArrayList<>();
 		
 		String localDoPasta = "C:\\temp\\dadosDePagamento"; 
 		
@@ -34,53 +36,80 @@ public class Program
 			System.out.println();
 			System.out.print("Digite o número correspondente: ");
 			int escolha = sc.nextInt();
-		
+				
 			File caminho = files[escolha - 1];
 			
-			System.out.println();
+			boolean addFile = new File(localDoPasta + "//Relatorio").mkdir();
+			String addTXT = localDoPasta + "//Relatorio//resultado.txt";
+			
 			
 			try(BufferedReader br = new BufferedReader(new FileReader(caminho))){
 				String line = br.readLine();
 				
 				while(line != null) {
 					String[] campos = line.split(", ");
-					double pagamento = Double.parseDouble(campos[0]);
-					double conducao5 = Double.parseDouble(campos[1]);
-					double caixinhaTotal = Double.parseDouble(campos[2]);
-					double caixinhaConta = Double.parseDouble(campos[3]);
-					double caixinhaEspecie = Double.parseDouble(campos[4]);
 					
-					RelatorioPagamentos rp = new RelatorioPagamentos(caixinhaTotal, caixinhaConta, caixinhaEspecie, conducao5,  pagamento);
-					list.add(rp);				
+				    Double valorTotal = Double.parseDouble(campos[0]);
+					int dia = Integer.parseInt(campos[1]);
+					
+					Pagamento p = new Pagamento(valorTotal, dia);
+					list.add(p);
+					line = br.readLine();
+				}
+				try(BufferedWriter bw = new BufferedWriter(new FileWriter(addTXT))){
+					double pgORvl = 0.0;
+					double cond = 0.0;
+					double cx = 0.0;
+					
+					for(Pagamento p : list) {
+						bw.write("**************************");
+						bw.newLine();
+						bw.write("DIA " + p.getDia());
+						bw.newLine();
+						bw.write("Vale/Pagamento: " + p.getPagamento(p.getCaixinha()));
+						bw.newLine();
+						bw.write("Condução: " + p.getConducao());
+						bw.newLine(); bw.newLine();
+						bw.write("Caixinha: " + p.getCaixinha());
+						bw.newLine();
+						bw.write("Total recebido: " + p.getValorTotal());
+						bw.newLine();bw.newLine();
+						
+						pgORvl += p.getPagamento(p.getCaixinha()); 
+						cond += p.getConducao();
+						cx += p.getCaixinha();
+						
+						bw.write("**************************");
+						bw.newLine();
+						bw.write("Pg/Vl. " + String.format("%.0f", pgORvl) 
+								+ " + cx." + String.format("%.0f", cx) 
+								+ " + condução." + String.format("%.0f", cond));
+						bw.newLine();
+						bw.write("**************************");
+					}
+					
+				}catch(IOException e) {
+					System.out.println("Erro na saida: " + e.getMessage());
+				}
+			}catch(IOException e) {
+				System.out.println("Erro na leitura: " + e.getMessage());
+			}
+			
+			try(BufferedReader br = new BufferedReader(new FileReader(addTXT))){
+				String line = br.readLine();
+				while(line != null) {
+					System.out.println(line);
 					line = br.readLine();
 				}
 				
-				for(RelatorioPagamentos rp : list) {
-					System.out.println(rp);
-					System.out.println();
-				}
-				double sum = 0.0;
-				
-				for(RelatorioPagamentos rp : list) {
-					sum += rp.total();
-				}
-				System.out.println("***********************************");
-				System.out.println("TOTAL MENSAL: " + sum);
-				System.out.println("***********************************");
-				
 			}catch(IOException e) {
-				System.out.println("Erro na leitura: " + e.getMessage());
-			}catch(Exception e) {
-				e.printStackTrace();
+				System.out.println("Falha na leitura: " + e.getMessage());
 			}
 		}catch(ArrayIndexOutOfBoundsException e) {
-			System.out.println("Entrada escolhida inexistente!");
+			System.out.println("Documento selecionado não existe.");
 		}catch(InputMismatchException e) {
-			System.out.println("Caractere inválido!");
+			System.out.println("Valor digitado incompatível.");
 		}
-		
-		
-		
 		sc.close();
 	}
 
